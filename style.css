@@ -1,0 +1,152 @@
+/* 1. Global & Theme Settings - Pure Gold Gradient Background */
+body {
+    /* Background Gold Gradient - simulating light reflection on metal */
+    background: linear-gradient(135deg, 
+        #fbf8cc 0%,   /* Highlight */
+        #c6a04f 25%,  /* Mid-tone gold */
+        #a47833 50%,  /* Deep shadow/base */
+        #c6a04f 75%,
+        #fbf8cc 100%  /* Second highlight */
+    );
+    color: #444444; 
+    font-family: Arial, sans-serif; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    overflow: hidden; 
+}
+
+/* New: Styling for the "Food Menu" Title */
+.menu-title {
+    font-size: 5rem; 
+    font-family: 'Georgia', 'Times New Roman', serif; 
+    text-align: center; 
+    margin-bottom: 20px;
+    margin-top: 0; 
+    text-transform: uppercase;
+    letter-spacing: 8px; 
+    text-shadow: 
+        3px 3px 0 #8d6d3d, 
+        5px 5px 8px rgba(0, 0, 0, 0.5); 
+    color: #ffd700; 
+}
+
+/* 2. Book and Container */
+.book-container {
+    position: relative;
+    width: 90%; 
+    max-width: 600px; 
+    aspect-ratio: 1 / 1.4; 
+    perspective: 2000px; 
+}
+
+#book {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d; 
+}
+
+/* 3. Page Styling and Initial State */
+.page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform-origin: left; 
+    transition: transform 1.2s ease-in-out; 
+    box-shadow: 10px 10px 30px rgba(0, 0, 0, 0.7);
+    backface-visibility: hidden; 
+    background-color: #ffffff; 
+    border: 1px solid #c6a04f; 
+}
+
+/* Image inside the page - ensures responsiveness */
+.page img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    display: block;
+}
+
+/* 4. Flipping Animation Class */
+.flipped {
+    transform: rotateY(-180deg); 
+}
+
+/* 5. Navigation Arrows Styling (Default/Desktop) */
+.nav-btn {
+    position: absolute;
+    top: 50%; /* Centered vertically on desktop */
+    transform: translateY(-50%);
+    background: rgba(198, 160, 79, 0.8); 
+    color: #444444; 
+    border: 2px solid #a47833; 
+    padding: 10px 15px;
+    cursor: pointer;
+    z-index: 100;
+    font-size: 1.5rem;
+    border-radius: 50%; 
+    opacity: 0.9;
+    transition: all 0.3s;
+}
+
+.nav-btn:hover:not(:disabled) {
+    opacity: 1;
+    box-shadow: 0 0 15px #ffd700; 
+}
+
+.nav-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.3;
+}
+
+/* Desktop Arrow Position */
+.left-arrow {
+    left: -60px; 
+}
+
+.right-arrow {
+    right: -60px; 
+}
+
+/* 6. Media Queries for Responsiveness (Mobile/Tablet) */
+@media (max-width: 768px) {
+    /* Adjust Title Size for Mobile */
+    .menu-title {
+        font-size: 3rem; 
+        margin-top: 15px;
+        letter-spacing: 5px;
+    }
+
+    /* Adjust Book Container to account for arrows below it */
+    .book-container {
+        margin-bottom: 70px; /* Make space for the buttons below the book */
+    }
+
+    /* --- KEY CHANGES FOR MOBILE ARROW POSITIONING --- */
+    .nav-btn {
+        position: fixed; /* Use fixed or absolute relative to the body/viewport */
+        top: auto; /* Remove vertical centering */
+        bottom: 10px; /* Position them at the bottom of the screen/viewport */
+        transform: none; /* Remove transform */
+        width: 40%; /* Make them wider to be easily tappable */
+        height: 50px;
+        border-radius: 5px; /* Square/rectangular buttons */
+        font-size: 1.2rem;
+        padding: 0; /* Remove padding for defined width/height */
+    }
+
+    .left-arrow {
+        left: 5%; /* Position left button on the left side of the screen */
+        right: auto;
+    }
+
+    .right-arrow {
+        right: 5%; /* Position right button on the right side of the screen */
+        left: auto;
+    }
+    /* --- END KEY CHANGES --- */
+}

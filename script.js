@@ -2,43 +2,55 @@ document.addEventListener('DOMContentLoaded', () => {
     const pages = document.querySelectorAll('.page');
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
-    const totalPages = pages.length; // This will correctly be 6
-    let currentPageIndex = 0; // Starts at 0 (representing page 1/cover)
+    
+    // There are 7 pages. totalPages represents the number of total flips (7 flips: 0->1, 1->2, ..., 6->7)
+    const totalPages = 7; 
+    let currentPageIndex = 0; // Starts at 0 (Page 1/Cover is showing)
 
     // Function to update the page view and set the flip state
     function updateBook() {
         pages.forEach((page, index) => {
-            // Check if the page should be flipped over (i.e., its index is before the current view index)
-            if (index < currentPageIndex) {
-                // Pages that have already been read/flipped (to the left)
-                page.classList.add('flipped');
-                // Ensure flipped pages stay underneath
-                page.style.zIndex = index + 1; 
+            // Only handle the first 7 pages
+            if (index < totalPages) {
+                
+                // If the page index is less than the current view index, it has been flipped.
+                if (index < currentPageIndex) {
+                    page.classList.add('flipped');
+                    // Flipped pages stack lower (z-index 1, 2, 3...)
+                    page.style.zIndex = index + 1; 
+                } else {
+                    page.classList.remove('flipped');
+                    // Unflipped pages stack from front to back (highest z-index is the current front page)
+                    page.style.zIndex = totalPages - index; 
+                }
             } else {
-                // Pages that are not yet flipped
-                page.classList.remove('flipped');
-                // Stack them visually from back to front (highest z-index is the cover/current page)
-                page.style.zIndex = totalPages - index; 
+                 // Hide any pages beyond the 7th one (e.g., page-8 if it was accidentally left in HTML)
+                page.style.display = 'none';
             }
         });
 
-        // Disable navigation buttons when at the start (page 1) or end (after page 6)
+        // The previous button is disabled only at the very beginning (index 0).
         prevBtn.disabled = currentPageIndex === 0;
-        nextBtn.disabled = currentPageIndex === totalPages; 
+        
+        // The next button is never disabled because of the looping logic.
+        nextBtn.disabled = false; 
     }
 
-    // Next Page Handler
+    // Next Page Handler with Looping
     function nextPage() {
-        // We can only move to the next "view" up to 6 times (0 to 6)
         if (currentPageIndex < totalPages) {
+            // Normal flip: 0 -> 1, 1 -> 2, ..., 6 -> 7
             currentPageIndex++;
-            updateBook();
+        } else {
+            // LOOPING FIX: If we are on the last flip (index 7), go back to the start (index 0)
+            currentPageIndex = 0; 
         }
+        updateBook();
     }
 
-    // Previous Page Handler
+    // Previous Page Handler 
     function prevPage() {
-        // We can only move back as long as we are not at the cover (index 0)
+        // Stops at the cover (index 0)
         if (currentPageIndex > 0) {
             currentPageIndex--;
             updateBook();
@@ -49,10 +61,10 @@ document.addEventListener('DOMContentLoaded', () => {
     nextBtn.addEventListener('click', nextPage);
     prevBtn.addEventListener('click', prevPage);
 
-    // Initial setup: call updateBook() to set the cover (page 1) as the current view
+    // Initial setup
     updateBook(); 
 
-    // Keyboard Arrow Key Navigation (Enhances desktop UX)
+    // Keyboard Arrow Key Navigation 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight') {
             nextPage();
